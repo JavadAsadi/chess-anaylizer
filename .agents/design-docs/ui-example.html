@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Chess Analyzer — UI concept</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #171c1a;
+      color: #eef1ec;
+      --muted: #a4aea7;
+      --line: #353e38;
+      --accent: #bbd7a1;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; }
+    .page { max-width: 1160px; margin: auto; padding: 28px 34px 24px; }
+    header { display: flex; align-items: center; justify-content: space-between; padding-bottom: 22px; border-bottom: 1px solid var(--line); gap: 16px; }
+    .brand { display: flex; align-items: center; gap: 11px; font-size: 19px; font-weight: 650; letter-spacing: -.5px; }
+    .brand-mark { display: grid; place-items: center; width: 35px; height: 35px; color: var(--accent); background: #2b352b; border-radius: 8px; font-family: "DejaVu Sans", serif; font-size: 27px; }
+    .concept { color: var(--muted); border: 1px solid #465148; border-radius: 99px; padding: 6px 11px; font-size: 11px; letter-spacing: .6px; }
+    .heading { margin: 27px 0 26px; }
+    .eyebrow { color: var(--accent); text-transform: uppercase; font-size: 10px; letter-spacing: 2px; font-weight: 650; }
+    h1 { margin: 8px 0 8px; font-size: 32px; font-weight: 550; letter-spacing: -1.2px; }
+    .heading p { margin: 0; color: var(--muted); font-size: 14px; }
+    main { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); gap: 28px; align-items: start; }
+    .board-column { min-width: 0; }
+    .board-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; font-size: 12px; }
+    .turn { display: flex; align-items: center; gap: 7px; }
+    .white-dot { width: 9px; height: 9px; border-radius: 50%; background: #f0f0e7; }
+    .muted { color: var(--muted); }
+    .board { display: grid; grid-template-columns: repeat(8, 1fr); aspect-ratio: 1; border-radius: 3px; overflow: hidden; box-shadow: 0 12px 30px #0002; container-type: inline-size; }
+    .square { position: relative; display: grid; place-items: center; background: #e5e5d2; min-width: 0; }
+    .square.dark { background: #829785; }
+    .square.last { background: #b6c57d; }
+    .square.dark.last { background: #a0b36a; }
+    .piece { font-family: "DejaVu Sans", serif; font-size: 10cqw; line-height: 1; color: #253029; -webkit-text-stroke: .45px #ebeddd; filter: drop-shadow(0 2px 1px #0003); transform: translateY(-1px); }
+    .piece.white { color: #fffdf0; -webkit-text-stroke: 1.2px #344236; }
+    .coordinate { position: absolute; font-size: 10px; font-weight: 700; color: #455e49; }
+    .dark .coordinate { color: #f5f4e6; }
+    .rank { top: 4px; left: 5px; }
+    .file { bottom: 3px; right: 5px; }
+    .board-toolbar { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 14px; }
+    .buttons { display: flex; gap: 8px; }
+    button { font: inherit; font-size: 12px; font-weight: 550; color: #e7ece3; background: #262e29; border: 1px solid #414b43; border-radius: 6px; padding: 10px 13px; white-space: nowrap; }
+    button:disabled { opacity: 1; cursor: default; }
+    button svg { width: 13px; height: 13px; vertical-align: -2px; margin-right: 5px; }
+    .board-hint { font-size: 11px; color: var(--muted); }
+    .fen-form { margin-top: 24px; }
+    .fen-form label { display: block; font-size: 11px; color: #c4ccc2; margin-bottom: 8px; }
+    .fen-row { display: flex; gap: 8px; align-items: stretch; }
+    textarea { flex: 1; min-width: 0; resize: none; border: 1px solid #414b43; border-radius: 6px; background: #1d2420; color: #bfcabd; padding: 10px 11px; font: 11px/1.7 ui-monospace, "DejaVu Sans Mono", monospace; overflow-wrap: anywhere; }
+    .load { background: var(--accent); color: #253121; border-color: var(--accent); }
+    .panel { background: #222a25; border: 1px solid #38433a; border-radius: 10px; margin-top: 28px; overflow: hidden; }
+    .panel-header { padding: 20px 22px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #38433a; }
+    .panel-header h2 { margin: 0; font-size: 15px; font-weight: 600; letter-spacing: -.2px; }
+    .status { font-size: 11px; color: var(--accent); display: flex; align-items: center; gap: 6px; }
+    .status-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 3px #bbd7a112; }
+    .evaluation { padding: 25px 22px 24px; display: flex; justify-content: space-between; align-items: flex-end; }
+    .evaluation-label { font-size: 10px; color: var(--muted); letter-spacing: 1.3px; text-transform: uppercase; }
+    .score { font-size: 56px; font-weight: 450; letter-spacing: -3px; line-height: 1.2; margin-top: 5px; color: #d7e7c8; font-variant-numeric: tabular-nums; }
+    .perspective { font-size: 11px; margin-top: 5px; color: var(--muted); }
+    .depth { text-align: right; font-size: 11px; color: var(--muted); padding-bottom: 3px; }
+    .depth strong { display: block; color: #e7ece3; font-size: 25px; font-weight: 450; margin-bottom: 2px; }
+    .lines-heading { display: flex; justify-content: space-between; margin: 0 22px; padding-bottom: 12px; border-bottom: 1px solid #38433a; font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 1.2px; }
+    .engine-line { padding: 18px 22px; border-bottom: 1px solid #38433a; }
+    .line-top { display: flex; align-items: center; gap: 8px; font-size: 12px; margin-bottom: 11px; }
+    .rank-number { display: grid; place-items: center; width: 19px; height: 19px; color: #b7c3b3; border: 1px solid #4b574b; border-radius: 4px; font-size: 10px; }
+    .line-score { color: #d4e6c2; font-size: 13px; font-weight: 600; font-variant-numeric: tabular-nums; }
+    .line-depth { margin-left: auto; color: var(--muted); font-size: 10px; }
+    .moves { color: #bec9bb; font: 12px/1.9 ui-monospace, "DejaVu Sans Mono", monospace; word-spacing: 2px; }
+    .moves b { color: #f4f5ec; font-weight: 600; }
+    .move-no { color: #8c9b8d; }
+    .panel-footer { font-size: 11px; color: var(--muted); padding: 16px 22px; line-height: 1.6; }
+    .caption { display: flex; gap: 8px; margin: 17px 4px 0; font-size: 11px; line-height: 1.7; color: var(--muted); }
+    .caption svg { flex: 0 0 14px; margin-top: 2px; }
+    footer { color: #a4aea7; font-size: 10px; line-height: 1.7; margin-top: 28px; padding-top: 16px; border-top: 1px solid var(--line); }
+    @media (max-width: 760px) {
+      .page { padding: 20px 18px; }
+      main { grid-template-columns: minmax(0, 1fr); gap: 25px; }
+      h1 { font-size: 28px; }
+      .panel { margin-top: 0; }
+      .board-hint { display: none; }
+      .brand { font-size: 16px; }
+      .concept { font-size: 9px; }
+      .fen-row { flex-wrap: wrap; }
+      textarea { flex-basis: 100%; }
+      .load { width: 100%; }
+      .piece.white { -webkit-text-stroke-width: .8px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <div class="brand"><span class="brand-mark" aria-hidden="true">♞</span>Chess Analyzer</div>
+      <span class="concept">UI CONCEPT · SAMPLE DATA</span>
+    </header>
+    <div class="heading">
+      <div class="eyebrow">Position analysis</div>
+      <h1>Explore the next move.</h1>
+      <p>Load a position. Follow an idea. See what the engine finds.</p>
+    </div>
+    <main>
+      <section class="board-column" aria-label="Chess position">
+        <div class="board-meta"><span class="turn"><span class="white-dot"></span>White to move</span><span class="muted">Move 5</span></div>
+        <div id="board" class="board" role="img" aria-label="Example chess position after 1. e4 e5 2. Nf3 Nc6 3. Bb5 a6 4. Ba4 Nf6, White to move"></div>
+        <div class="board-toolbar">
+          <div class="buttons">
+            <button type="button" disabled><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M7 4 2 9l5 5M3 9h9a5 5 0 0 1 5 5v2"/></svg>Undo</button>
+            <button type="button" disabled><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 7a7 7 0 1 1-1 6M4 2v5h5"/></svg>Reset position</button>
+          </div>
+          <span class="board-hint">Click or drag to move</span>
+        </div>
+        <div class="fen-form">
+          <label for="fen">Load a position · FEN</label>
+          <div class="fen-row">
+            <textarea id="fen" rows="2" readonly spellcheck="false">r1bqkb1r/1ppp1ppp/p1n2n2/4p3/B3P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 2 5</textarea>
+            <button type="button" class="load" disabled>Load position</button>
+          </div>
+        </div>
+      </section>
+      <aside aria-label="Sample engine analysis">
+        <div class="panel">
+          <div class="panel-header"><h2>Stockfish analysis</h2><span class="status"><span class="status-dot"></span>Analyzing</span></div>
+          <div class="evaluation">
+            <div><div class="evaluation-label">Evaluation</div><div class="score">+0.32</div><div class="perspective">Positive favors White</div></div>
+            <div class="depth"><strong>22</strong>Search depth</div>
+          </div>
+          <div class="lines-heading"><span>Engine lines</span><span>Top 3</span></div>
+          <div class="engine-line">
+            <div class="line-top"><span class="rank-number">1</span><span class="line-score">+0.32</span><span class="line-depth">Depth 22</span></div>
+            <div class="moves"><span class="move-no">5.</span> <b>O-O</b> Be7 <span class="move-no">6.</span> Re1 b5<br><span class="move-no">7.</span> Bb3 d6 <span class="move-no">8.</span> c3 O-O</div>
+          </div>
+          <div class="engine-line">
+            <div class="line-top"><span class="rank-number">2</span><span class="line-score">+0.25</span><span class="line-depth">Depth 22</span></div>
+            <div class="moves"><span class="move-no">5.</span> <b>d3</b> b5 <span class="move-no">6.</span> Bb3 Be7<br><span class="move-no">7.</span> O-O d6 <span class="move-no">8.</span> c3 O-O</div>
+          </div>
+          <div class="engine-line">
+            <div class="line-top"><span class="rank-number">3</span><span class="line-score">+0.18</span><span class="line-depth">Depth 22</span></div>
+            <div class="moves"><span class="move-no">5.</span> <b>Nc3</b> b5 <span class="move-no">6.</span> Bb3 Be7<br><span class="move-no">7.</span> d3 d6 <span class="move-no">8.</span> O-O O-O</div>
+          </div>
+          <div class="panel-footer">Analysis deepens while you explore.</div>
+        </div>
+        <div class="caption"><svg viewBox="0 0 20 20" width="14" height="14" fill="none" stroke="currentColor" aria-hidden="true"><circle cx="10" cy="10" r="8"/><path d="M10 9v5m0-9v1"/></svg><span>Every move, undo, or reset refreshes the analysis for the position on the board.</span></div>
+      </aside>
+    </main>
+    <footer>Static layout preview. Controls are inactive; evaluations, depths, and engine lines are illustrative, not Stockfish results.</footer>
+  </div>
+  <script>
+    // A static board illustration only; this file does not implement chess rules.
+    const placement = 'r1bqkb1r/1ppp1ppp/p1n2n2/4p3/B3P3/5N2/PPPP1PPP/RNBQK2R';
+    const glyphs = { k: '♚', q: '♛', r: '♜', b: '♝', n: '♞', p: '♟' };
+    const board = document.getElementById('board');
+    placement.split('/').forEach((rank, row) => {
+      const pieces = [...rank].flatMap(char => /[1-8]/.test(char) ? Array(Number(char)).fill(null) : [char]);
+      pieces.forEach((piece, col) => {
+        const name = 'abcdefgh'[col] + (8 - row);
+        const square = document.createElement('div');
+        square.className = 'square' + ((row + col) % 2 ? ' dark' : '') + (['g8', 'f6'].includes(name) ? ' last' : '');
+        if (piece) {
+          const symbol = document.createElement('span');
+          symbol.className = 'piece' + (piece === piece.toUpperCase() ? ' white' : '');
+          symbol.textContent = glyphs[piece.toLowerCase()];
+          square.append(symbol);
+        }
+        if (col === 0) {
+          const label = document.createElement('span');
+          label.className = 'coordinate rank'; label.textContent = 8 - row; square.append(label);
+        }
+        if (row === 7) {
+          const label = document.createElement('span');
+          label.className = 'coordinate file'; label.textContent = 'abcdefgh'[col]; square.append(label);
+        }
+        board.append(square);
+      });
+    });
+  </script>
+</body>
+</html>

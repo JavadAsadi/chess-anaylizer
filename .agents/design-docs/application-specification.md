@@ -14,6 +14,25 @@ or loading another position automatically refreshes the analysis.
 For the MVP, the user enters a FEN string to supply the starting position. This
 lets us build and use the frontend before integrating the recommendation system.
 
+## Reading guide and visual reference
+
+This specification is the source of truth for behavior, architecture, acceptance
+criteria, and MVP scope. The approved visual references are:
+
+- [HTML mockup](ui-example.html), which can be opened directly in a browser.
+- [Desktop preview](ui-example-desktop.png).
+- [Mobile preview](ui-example-mobile.png).
+
+Follow their layout, dark palette, board colors, typography, and spacing as the
+visual starting point. The specification takes precedence whenever static preview
+content differs from required behavior.
+
+The mockup contains an illustrative opening position and invented engine scores,
+depths, and continuations. Its controls are intentionally inactive, and its board
+is a static illustration. The working application must use the specified initial
+position, interactive Chessground board, and actual Stockfish results. Preview
+badges and sample-data disclaimers belong only to the design artifacts.
+
 ## Confirmed goals and preferences
 
 - Display a chessboard with pieces that the user can interact with and move.
@@ -226,20 +245,24 @@ a browser check of FEN loading, legal interaction, live analysis, undo, reset,
 and responsive layout. Test score conversion and stream consistency rather than
 requiring identical numeric evaluations across engine versions.
 
-## Work completed
+## Implementation status
 
-- Created the Git repository with an initial Apache-2.0 license.
-- Replaced the license with the complete GPL v3 text.
-- Added a README explicitly selecting GPL-3.0-or-later.
-- Added a root .gitignore that excludes the JetBrains .idea directory.
-- Merged those changes into main through pull request #1.
-- Created .agents/design-docs as the location for design documentation.
-- Drafted the application specification and updated it with the FEN input, position
-  exploration, legal moves, three live engine lines, undo, reset, and the future
-  recommendation-system boundary.
+Status recorded on 2026-09-28. Update this section as implementation progresses;
+check the repository to confirm the current state.
 
-At the time of this specification, the checked-out branch is main. There is no
-application scaffold, package.json, board implementation, backend, or test suite yet.
+Completed repository setup and documentation:
+
+- GPL v3 license text and a GPL-3.0-or-later declaration in the README.
+- A root .gitignore excluding JetBrains .idea settings.
+- This specification with agreed MVP requirements and acceptance criteria.
+- An approved static HTML mockup and desktop/mobile screenshots.
+- README links and a root AGENTS.md providing an entry point for new contributors.
+
+Application implementation has not started. There is no application scaffold,
+package.json, working Chessground board, chess.js integration, Stockfish worker,
+or application test suite. The HTML mockup is a design preview, not the application.
+There are no application setup, run, or test commands yet; document them in the
+README as part of scaffolding.
 
 ## Scope boundaries
 
